@@ -1,5 +1,7 @@
-# little_list
-a simple ionic + cordova app which displays a list of canned events, and navigates to a detail view for one of them
+# little_blue_app
+Based on [little_list](https://github.com/aliceliveprojects/little_list).
+
+A simple ionic + cordova app which displays a list of advertising Bluetooth LE devices, attemping a connection to one of them, on selection.
 
 ## Quick Start
 
@@ -7,14 +9,11 @@ ionic cordova platform add android
 
 ionic cordova run android
 
-
 ### Notes
-
-1. gulpfile.js is missing. Download from https://github.com/ionic-team/ionic-app-base/blob/master/gulpfile.js place the gulpfile.js in the top level of the ionic project
 
 #### Getting this working in MMU Student Windows 10
 
-You will find most of the apps needed to get LittleList to build and install on an android phone, but the OS set-up is a little idiosyncratic!
+You will find most of the apps needed to get this code to build and install on an android phone, but the OS set-up is a little idiosyncratic!
 
 Android Studio and Android SDK 26 are already installed
 MS VS Code is installed
@@ -96,7 +95,7 @@ We're running version 4.10
 
 
 * you will need to add the ionic v1 toolkit  package to the ionic CLI:
-(little_list is an ionic v1 project (yes, we're still using ionic v1 and angularjs. BECAUSE.))
+(this is an ionic v1 project (yes, we're still using ionic v1 and angularjs. Reason is twofold: first; we have alot of legacy code which we haven't the resource to convert and, second; we're OK with that, because angularjs is maintained and stable.))
 
 ```
 npm i -D @ionic/v1-toolkit
@@ -109,7 +108,7 @@ npm i -D @ionic/v1-toolkit
 ionic cordova build android
 ```
 
-This should create an android .apk file for you, in the little_list\code\little_list\platforms\android\app\build\outputs\apk\debug
+This should create an android .apk file for you, in the <installation directory>\code\platforms\android\app\build\outputs\apk\debug
 
 * Android Studio is installed, but you will need to put the tools in your PATH before you can deploy to a phone.
 
@@ -137,7 +136,7 @@ ionic cordova run android
 ```
 
 
-* Hey, presto! Little list is now on your device. You can step through it using VSCode, too. But you will need Cordova Tools installed. Make sure you 'attach to running app'.
+* Hey, presto! The app is now on your device. You can step through it using VSCode, too. But you will need Cordova Tools installed. Make sure you 'attach to running app'.
 
 
 
