@@ -1,7 +1,7 @@
 <ion-view style="background-color: #272733;" can-swipe-back="false">
 
     <ion-header-bar class="bar-dark" align-title="center">
-        <h1 class="title">Services: {{vm.name}}</h1>
+        <h1 class="title">Properties: {{vm.name}}</h1>
     </ion-header-bar>
 
 
@@ -35,11 +35,6 @@
         <button class="button button-positive col" style="margin: 5px; color: white;" ng-click="vm.done()"
             style="position: absolute; width: 50%; left: 50%; transform: translate(-50%,0%);">
             Done
-        </button>
-
-        <button class="button button-positive col" style="margin: 5px; color: white;" ng-click="vm.update()" style="position: absolute; width: 50%; left: 50%; transform: translate(-50%,0%);">
-            <span class="button-text">Query</span>
-            <ion-spinner ng-show="vm.busy" class="spinner-light"></ion-spinner>
         </button>
 
         <i class="col-20"></i>

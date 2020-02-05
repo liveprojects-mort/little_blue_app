@@ -15,32 +15,53 @@
         eventsSrvc
     ) {
         var vm = angular.extend(this, {
-            events : []
+            events : [],
+            hasEvents : false,
+            busy: false
+
          });
         
 
         
+
+        function getEvents(){
+            vm.events = eventsSrvc.getEvents();
+            vm.hasEvents = vm.events.length != 0;
+        }
+
+        function onNewEvents(){
+            vm.busy = false;
+            getEvents();
+        }
+
+        function onError(error){
+            vm.busy = false;
+            console.log(`Error: ${JSON.stringify(error)}`);
+        }
+
+
+        function updateEvents(){
+            vm.busy = true;
+            eventsSrvc.updateEvents()
+            .then(onNewEvents)
+            .catch(onError)   
+        }
+
+        
         vm.onItemSelected = function(index){
             console.log("Item : " + index);
-
-            // we're passing parameters into the new state
-            // 'selected is an attribute in a parameter object, defined in the module definition
-            // I'm going to write the destination controller, so it knows to look for an object with a 'selected' attribute
-            $state.go('events_detail', {selected: index});
-
-
+            eventsSrvc.selectEventAt(index);
+            $state.go('events_detail');
         }
 
-        vm.noEvents = function(){
-            return vm.events.length == 0;
-        }
 
         vm.update = function(){
-            $state.go('events_update');
+            updateEvents();
         }
 
+        getEvents();
 
-        vm.events = eventsSrvc.getEvents();
-              
+        
+            
     }
 })();
