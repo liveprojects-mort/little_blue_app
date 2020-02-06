@@ -18,8 +18,10 @@
         var eventsArray = [];
         var event = {};
         var detail = {};
+        var device_id = "";
         var service_id = "";
         var characteristic_id = "";
+        var property = "";
         var isBusy = false;
         var service = {};
 
@@ -202,11 +204,11 @@
                     if (!detail[item.service][item.characteristic]) {
                         detail[item.service][item.characteristic] = {};
                     }
-                    if(!detail[item.service][item.characteristic].properties){
+                    if (!detail[item.service][item.characteristic].properties) {
                         detail[item.service][item.characteristic].properties = [];
                     }
-                    detail[item.service][item.characteristic].properties = 
-                    detail[item.service][item.characteristic].properties.concat(item.properties);
+                    detail[item.service][item.characteristic].properties =
+                        detail[item.service][item.characteristic].properties.concat(item.properties);
                 }
             );
 
@@ -217,11 +219,13 @@
         }
 
 
+
         function connectGetDetailDisconnect(id) {
             var deferred = $q.defer();
 
             if (!isBusy) {
                 isBusy = true;
+                device_id = id;
                 detail = [];
                 ble.connect(
                     id,
@@ -240,6 +244,7 @@
                             });
                     },
                     function (error) {
+                        // assume the device has disconnected.
                         isBusy = false;
                         console.log(JSON.stringify(error, null, 2));
                         deferred.reject(error);
@@ -247,7 +252,7 @@
             } else {
                 $timeout(
                     function () {
-                        deferred.resolve(detail);
+                        deferred.resolve({});
                     }
                 );
             }
@@ -257,6 +262,113 @@
 
         }
 
+        function connectWriteDisconnect(device_id, service_id, characteristic_id, arraybuffer) {
+            var deferred = $q.defer();
+
+            if (!isBusy) {
+                isBusy = true;
+    
+                ble.connect(
+                    device_id,
+                    function (data) {
+
+              
+                        ble.read(device_id, service_id, characteristic_id,
+
+
+                            function (response) {
+
+                                ble.disconnect(
+                                    id,
+                                    function () {
+                                        isBusy = false;
+                                        deferred.resolve(response);
+                                    },
+                                    function (error) {
+                                        isBusy = false;
+                                        deferred.reject(error);
+                                    });
+
+                            },
+                            function (error) {
+                                // assume the deivice has disconnected.
+                                isBusy = false;
+                                console.log(JSON.stringify(error, null, 2));
+                                deferred.reject(error);
+                            });
+                    },
+                    function (error) {
+                        // assume the deivice has disconnected.
+                        isBusy = false;
+                        console.log(JSON.stringify(error, null, 2));
+                        deferred.reject(error);
+                    });
+            } else {
+                $timeout(
+                    function () {
+                        deferred.resolve({});
+                    }
+                );
+            }
+
+
+            return deferred.promise;
+
+        }
+
+        function connectReadDisconnect(device_id, service_id, characteristic_id) {
+            var deferred = $q.defer();
+
+            if (!isBusy) {
+                isBusy = true;
+                
+                ble.connect(
+                    device_id,
+                    function (data) {
+
+   
+                        ble.read(device_id, service_id, characteristic_id,
+
+
+                            function (response) {
+
+                                ble.disconnect(
+                                    device_id,
+                                    function () {
+                                        isBusy = false;
+                                        deferred.resolve(response);
+                                    },
+                                    function (error) {
+                                        isBusy = false;
+                                        deferred.reject(error);
+                                    });
+
+                            },
+                            function (error) {
+                                // assume the deivice has disconnected.
+                                isBusy = false;
+                                console.log(JSON.stringify(error, null, 2));
+                                deferred.reject(error);
+                            });
+                    },
+                    function (error) {
+                        // assume the deivice has disconnected.
+                        isBusy = false;
+                        console.log(JSON.stringify(error, null, 2));
+                        deferred.reject(error);
+                    });
+            } else {
+                $timeout(
+                    function () {
+                        deferred.resolve({});
+                    }
+                );
+            }
+
+
+            return deferred.promise;
+
+        }
 
 
         service.updateEvents = function () {
@@ -296,28 +408,45 @@
             return Object.keys(detail);
         }
 
-        service.selectService = function(id){
+        service.selectService = function (id) {
             service_id = id;
-        }     
-        
-        service.getService = function(){
+        }
+
+        service.getService = function () {
             return service_id;
         }
 
-        service.getCharacteristics = function(){
+        service.getCharacteristics = function () {
             return Object.keys(detail[service_id]);
         }
 
-        service.selectCharacteristic = function(id){
-            return characteristic_id = id;
+        service.selectCharacteristic = function (id) {
+            characteristic_id = id;
         }
 
-        service.getCharacteristic = function(){
+        service.getCharacteristic = function () {
             return characteristic_id;
         }
 
-        service.getProperties = function(){
+        service.getProperties = function () {
             return detail[service_id][characteristic_id].properties;
+        }
+
+        service.selectProperty = function (value) {
+            property = value;
+        }
+
+        service.getProperty = function () {
+            return property;
+        }
+
+
+        service.connectReadDisconnect = function(){
+            return connectReadDisconnect(device_id, service_id, characteristic_id);
+        }
+
+        service.connectWriteDisconnect = function(arraybuffer){
+            return connectWriteDisconnect(device_id, service_id, characteristic_id, arraybuffer);
         }
 
         return service;

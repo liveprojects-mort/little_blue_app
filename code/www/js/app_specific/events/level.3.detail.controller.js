@@ -8,27 +8,50 @@
     control.$inject = [
         '$state',
         'eventsSrvc'
-        ];
-    
+    ];
+
     function control(
         $state,
         eventsSrvc
     ) {
         var vm = angular.extend(this, {
-            id : 'no  id',
+            id: 'no  id',
             name: 'no name',
             service_id: 'no service_id',
             characteristic_id: 'no characteristic id',
-            items : [],
-            busy : false,
-            hasItems: false
-         });
-        
-        vm.onItemSelected = function(index){
-            
+            items: [],
+            responses: [],
+            busy: false,
+            hasItems: false,
+            hasResponses: false
+
+        });
+
+        vm.onItemSelected = function (index) {
+            var property = vm.items[index];
+            eventsSrvc.selectProperty(property);
+
+            if (property == "Read") {
+                if (!vm.busy) {
+                    vm.busy = true;
+                    eventsSrvc.connectReadDisconnect()
+                        .then(function (response) {
+
+                            var decoded = new TextDecoder().decode(response);
+                            vm.responses.push(decoded);
+                            vm.hasResponses = true;
+                            vm.busy = false;
+                        })
+                        .catch(function (error) {
+                            console.log(JSON.stringify(error, null, 2));
+                            vm.busy = false;
+                        });
+                }
+            }
+
         }
 
-        vm.done = function(){
+        vm.done = function () {
             $state.go('level_2_detail');
         }
 
