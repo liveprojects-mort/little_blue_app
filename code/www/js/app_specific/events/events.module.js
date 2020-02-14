@@ -12,18 +12,23 @@
 					templateUrl: 'js/app_specific/events/events.list.html',
                     controller: 'eventsListCtrl as vm'
                 })
-                .state('events_update', {
-					cache: false,
-					url: '/events_update',
-					templateUrl: 'js/app_specific/events/events.update.html',
-                    controller: 'eventsUpdateCtrl as vm'
-                })
                 .state('events_detail', {
 					cache: false,
 					url: '/events_detail',
                     templateUrl: 'js/app_specific/events/events.detail.html',
-                    params: {'selected': 0 },
                     controller: 'eventsDetailCtrl as vm'
+				})
+				.state('level_2_detail', {
+					cache: false,
+					url: '/level_2_detail',
+                    templateUrl: 'js/app_specific/events/level.2.detail.html',
+                    controller: 'level2DetailCtrl as vm'
+				})
+				.state('level_3_detail', {
+					cache: false,
+					url: '/level_3_detail',
+                    templateUrl: 'js/app_specific/events/level.3.detail.html',
+                    controller: 'level3DetailCtrl as vm'
                 })
             });
 				
